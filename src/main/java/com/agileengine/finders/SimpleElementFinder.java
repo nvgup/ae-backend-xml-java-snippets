@@ -13,13 +13,18 @@ import java.util.Optional;
 
 public class SimpleElementFinder implements ElementFinder {
 
+    /**
+     * Indicates the threshold of the weight which should have the element to be considered
+     * into finding algorithm. Increase this value for more stringent elements filtering
+     */
+    private static final int WEIGHT_SUCCESS_THRESHOLD = 40;
     private static final int DEFAULT_ATTRIBUTE_WEIGHT = 2;
     private static final String CSS_ALL_SELECTOR = "*";
 
     private static final Map<String, Integer> ATTRIBUTES_WEIGHTS = new HashMap<String, Integer>() {{
         put("id", 100);
         put("title", 50);
-        put("text", 30);
+        put("text", 40);
         put("class", 25);
         put("href", 5);
         put("onclick", 5);
@@ -45,7 +50,10 @@ public class SimpleElementFinder implements ElementFinder {
 
             if (elementWeight > mostSimilarElementWeight) {
                 mostSimilarElementWeight = elementWeight;
-                mostSimilarElement = element;
+
+                if (mostSimilarElementWeight > WEIGHT_SUCCESS_THRESHOLD) {
+                    mostSimilarElement = element;
+                }
             }
         }
 
